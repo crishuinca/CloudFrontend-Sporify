@@ -1,8 +1,16 @@
-<section class="card">
-  <p class="eyebrow">Sesión activa</p>
-  <h1>Hola, {{ auth.displayName() }}</h1>
-  <p class="hint">
-    El login con MSAL ya funciona. En la próxima capa van búsqueda, playlists y likes.
-  </p>
-  <p class="account">{{ auth.account()?.username }}</p>
+<section class="page">
+  <p class="eyebrow">Perfil</p>
+  <h1>Hola, {{ profile()?.displayName || auth.displayName() }}</h1>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else if (profile()) {
+    <p class="muted">{{ profile()?.azureSub }}</p>
+  } @else {
+    <p class="muted">Cargando perfil desde el backend…</p>
+  }
+  <nav class="shortcuts">
+    <a routerLink="/buscar">Buscar música</a>
+    <a routerLink="/playlists">Playlists</a>
+    <a routerLink="/likes">Me gusta</a>
+  </nav>
 </section>

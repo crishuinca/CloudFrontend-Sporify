@@ -1,15 +1,5 @@
-:host {
-  display: block;
-  padding: 2rem 1.25rem;
-}
-
-.card {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 2rem;
-  border-radius: 1.25rem;
-  background: #16161f;
-  border: 1px solid #2a2a38;
+.page {
+  max-width: 42rem;
 }
 
 .eyebrow {
@@ -20,17 +10,18 @@
   font-size: 0.75rem;
 }
 
-h1 {
-  margin: 0 0 0.75rem;
+.shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
-.hint,
-.account {
-  color: #b5b5c3;
-}
-
-.account {
-  margin-top: 1.25rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.9rem;
+.shortcuts a {
+  color: #0b0b10;
+  background: #1db954;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
 }

@@ -1,12 +1,30 @@
-<header class="topbar">
-  <a class="brand" routerLink="/">Sporify</a>
-  @if (auth.loggedIn()) {
-    <div class="actions">
-      <span class="user">{{ auth.displayName() }}</span>
-      <button type="button" (click)="auth.logout()">Cerrar sesión</button>
-    </div>
+@if (!auth.ready()) {
+  <p class="boot">Cargando...</p>
+} @else {
+  <header class="topbar">
+    <a class="brand" routerLink="/">Sporify</a>
+    @if (auth.loggedIn()) {
+      <nav class="nav">
+        <a routerLink="/buscar" routerLinkActive="active">Buscar</a>
+        <a routerLink="/playlists" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Playlists</a>
+        <a routerLink="/likes" routerLinkActive="active">Me gusta</a>
+      </nav>
+      <div class="actions">
+        <span class="user">{{ auth.displayName() }}</span>
+        <button type="button" (click)="auth.logout()">Cerrar sesion</button>
+      </div>
+    }
+  </header>
+  <main>
+    <router-outlet />
+  </main>
+  @if (player.current(); as track) {
+    <footer class="player">
+      <div class="now">
+        <strong>{{ track.title }}</strong>
+        <span>{{ track.artist }}</span>
+      </div>
+      <audio [src]="track.streamUrl" controls autoplay></audio>
+    </footer>
   }
-</header>
-<main>
-  <router-outlet />
-</main>
+}
