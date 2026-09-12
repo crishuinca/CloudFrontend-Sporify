@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  padding: 2rem 1.25rem;
+}
+
+.card {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  background: #16161f;
+  border: 1px solid #2a2a38;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: #8b8b9a;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+}
+
+.hint,
+.account {
+  color: #b5b5c3;
+}
+
+.account {
+  margin-top: 1.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+}
