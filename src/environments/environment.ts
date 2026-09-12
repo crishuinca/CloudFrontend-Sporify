@@ -1,6 +1,7 @@
 export const environment = {
   msalClientId: '7dca2eec-affd-406c-bfe9-53f2a3635f96',
-  msalAuthority: 'https://login.microsoftonline.com/tobal.onmicrosoft.com',
+  msalAuthority:
+    'https://login.microsoftonline.com/f0ec7247-e735-4fe5-9376-8bd06cc41a58',
   redirectUri: 'http://localhost:4200',
   apiBaseUrl: 'http://localhost:8080/api',
   apiScopes: [

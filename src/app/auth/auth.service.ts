@@ -10,6 +10,7 @@ export class AuthService {
   private readonly msal = inject(MsalService);
   private readonly broadcast = inject(MsalBroadcastService);
 
+  readonly ready = signal(false);
   readonly account = signal<AccountInfo | null>(null);
   readonly displayName = computed(() => {
     const current = this.account();
@@ -22,12 +23,14 @@ export class AuthService {
   readonly loggedIn = computed(() => this.account() !== null);
 
   constructor() {
-    this.msal.initialize().subscribe(() => {
-      this.msal.handleRedirectObservable().subscribe();
-    });
+    this.syncAccount();
+    this.ready.set(true);
     this.broadcast.inProgress$
       .pipe(filter((status) => status === InteractionStatus.None))
-      .subscribe(() => this.syncAccount());
+      .subscribe(() => {
+        this.syncAccount();
+        this.ready.set(true);
+      });
   }
 
   login(): void {

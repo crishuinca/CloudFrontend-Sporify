@@ -1,5 +1,4 @@
-                  /* eslint-disable */
-  import {
+import {
   BrowserCacheLocation,
   InteractionType,
   IPublicClientApplication,
@@ -19,6 +18,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       authority: environment.msalAuthority,
       redirectUri: environment.redirectUri,
       postLogoutRedirectUri: environment.redirectUri,
+      knownAuthorities: ['login.microsoftonline.com'],
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -27,8 +27,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
-  const protectedResourceMap = new Map<string, string[]>();
-  protectedResourceMap.set(environment.apiBaseUrl, environment.apiScopes);
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set(`${environment.apiBaseUrl}/*`, environment.apiScopes);
 
   return {
     interactionType: InteractionType.Redirect,
