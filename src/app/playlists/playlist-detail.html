@@ -1,0 +1,24 @@
+<section class="page">
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (playlist(); as current) {
+    <h1>{{ current.name }}</h1>
+    <ul class="tracks">
+      @for (track of current.tracks; track track.id) {
+        <li>
+          <div class="meta">
+            <strong>{{ track.title }}</strong>
+            <span>{{ track.artist }}</span>
+          </div>
+          <div class="actions">
+            <button type="button" (click)="player.play(track)">Reproducir</button>
+            <button type="button" (click)="remove(track)">Quitar</button>
+          </div>
+        </li>
+      } @empty {
+        <li class="muted">Esta playlist esta vacia. Agrega temas desde Buscar.</li>
+      }
+    </ul>
+  }
+</section>

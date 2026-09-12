@@ -1,0 +1,20 @@
+.page {
+  max-width: 52rem;
+}
+
+.search-bar,
+.playlist-pick {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar input,
+.playlist-pick select {
+  flex: 1;
+}
+
+.playlist-pick {
+  align-items: center;
+  color: #b5b5c3;
+}

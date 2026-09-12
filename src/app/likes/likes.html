@@ -1,0 +1,22 @@
+<section class="page">
+  <h1>Me gusta</h1>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  <ul class="tracks">
+    @for (track of playlist()?.tracks ?? []; track track.id) {
+      <li>
+        <div class="meta">
+          <strong>{{ track.title }}</strong>
+          <span>{{ track.artist }}</span>
+        </div>
+        <div class="actions">
+          <button type="button" (click)="player.play(track)">Reproducir</button>
+          <button type="button" (click)="remove(track)">Quitar</button>
+        </div>
+      </li>
+    } @empty {
+      <li class="muted">Aun no hay canciones en Me gusta.</li>
+    }
+  </ul>
+</section>

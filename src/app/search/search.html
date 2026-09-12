@@ -1,0 +1,57 @@
+<section class="page">
+  <h1>Buscar</h1>
+  <form class="search-bar" (ngSubmit)="search()">
+    <input
+      name="query"
+      [(ngModel)]="query"
+      type="search"
+      placeholder="Artista, canción o álbum"
+    />
+    <button type="submit">Buscar</button>
+  </form>
+
+  @if (playlists().length > 0) {
+    <label class="playlist-pick">
+      Agregar a
+      <select name="playlist" [(ngModel)]="selectedPlaylistId">
+        <option [ngValue]="null">Elige una playlist</option>
+        @for (playlist of playlists(); track playlist.id) {
+          <option [ngValue]="playlist.id">{{ playlist.name }}</option>
+        }
+      </select>
+    </label>
+  }
+
+  @if (loading()) {
+    <p class="muted">Buscando…</p>
+  }
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (notice()) {
+    <p class="ok">{{ notice() }}</p>
+  }
+
+  <ul class="tracks">
+    @for (track of tracks(); track track.externalId) {
+      <li>
+        @if (track.imageUrl) {
+          <img [src]="track.imageUrl" [alt]="track.title" />
+        }
+        <div class="meta">
+          <strong>{{ track.title }}</strong>
+          <span>{{ track.artist }}</span>
+        </div>
+        <div class="actions">
+          <button type="button" (click)="player.play(track)">Reproducir</button>
+          <button type="button" (click)="like(track)">Me gusta</button>
+          <button type="button" (click)="addToPlaylist(track)">A playlist</button>
+        </div>
+      </li>
+    } @empty {
+      @if (!loading()) {
+        <li class="muted">Escribe algo y busca en Jamendo.</li>
+      }
+    }
+  </ul>
+</section>
