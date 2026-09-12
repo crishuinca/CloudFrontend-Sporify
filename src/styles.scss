@@ -1,14 +1,14 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
-  background: #0b0b10;
-  color: #f4f4f8;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
   font-family:
+    "DM Sans",
     "Segoe UI",
-    Inter,
     system-ui,
-    -apple-system,
     sans-serif;
 }
 
@@ -17,46 +17,65 @@ body {
 }
 
 .page {
-  padding: 1.5rem 1.25rem 5rem;
+  width: min(920px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 2rem;
+}
+
+.panel {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.28);
 }
 
 h1 {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
+  font-size: 2rem;
+  letter-spacing: -0.03em;
 }
 
 .muted {
-  color: #8b8b9a;
+  color: #b3b3b3;
 }
 
 .error {
-  color: #ff8a8a;
+  color: #f87171;
 }
 
 .ok {
-  color: #1db954;
+  color: #c4b5fd;
 }
 
 input,
 select {
-  border: 1px solid #2a2a38;
-  background: #16161f;
+  border: 0;
+  background: #242424;
   color: inherit;
-  border-radius: 0.75rem;
-  padding: 0.7rem 0.9rem;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
 }
 
 button {
   border: 0;
   border-radius: 999px;
-  padding: 0.7rem 1rem;
-  font-weight: 600;
-  color: #0b0b10;
-  background: #1db954;
+  padding: 0.7rem 1.1rem;
+  font-weight: 700;
+  color: #12081f;
+  background: #9b7dff;
   cursor: pointer;
 }
 
 button:hover {
-  background: #22d160;
+  background: #b794f6;
+}
+
+.ghost-btn {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.ghost-btn:hover {
+  background: #3a3a3a;
 }
 
 .tracks {
@@ -66,29 +85,52 @@ button:hover {
 }
 
 .tracks li {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid #2a2a38;
+  gap: 0.9rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+}
+
+.tracks li.muted {
+  display: block;
+}
+
+.tracks li:hover,
+.tracks li.playing {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .tracks img {
-  width: 3rem;
-  height: 3rem;
+  width: 48px;
+  height: 48px;
   object-fit: cover;
-  border-radius: 0.5rem;
+  border-radius: 6px;
 }
 
 .tracks .meta {
-  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+}
+
+.tracks .meta strong,
+.tracks .meta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tracks .meta span {
-  color: #8b8b9a;
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+.tracks .duration {
+  color: #b3b3b3;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .tracks .actions {
@@ -98,6 +140,6 @@ button:hover {
 }
 
 .tracks .actions button {
-  padding: 0.45rem 0.75rem;
-  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.78rem;
 }

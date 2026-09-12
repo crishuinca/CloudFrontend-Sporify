@@ -8,6 +8,8 @@ import { filter, switchMap, take } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { UserProfile } from '../api/api.models';
 import { AuthService } from '../auth/auth.service';
+import { LibraryService } from '../playlists/library.service';
+import { playlistInitial } from '../shared/format-time';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +19,14 @@ import { AuthService } from '../auth/auth.service';
 })
 export class Home {
   protected readonly auth = inject(AuthService);
+  protected readonly library = inject(LibraryService);
+  protected readonly playlistInitial = playlistInitial;
   private readonly api = inject(ApiService);
   private readonly broadcast = inject(MsalBroadcastService);
 
   readonly profile = signal<UserProfile | null>(null);
   readonly error = signal<string | null>(null);
+  readonly greeting = this.makeGreeting();
 
   constructor() {
     this.broadcast.inProgress$
@@ -35,5 +40,16 @@ export class Home {
         next: (profile) => this.profile.set(profile),
         error: (err: Error) => this.error.set(err.message),
       });
+  }
+
+  private makeGreeting(): string {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return 'Buenos dias';
+    }
+    if (hour < 19) {
+      return 'Buenas tardes';
+    }
+    return 'Buenas noches';
   }
 }

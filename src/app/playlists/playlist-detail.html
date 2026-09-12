@@ -1,24 +1,51 @@
 <section class="page">
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
-  }
-  @if (playlist(); as current) {
-    <h1>{{ current.name }}</h1>
-    <ul class="tracks">
-      @for (track of current.tracks; track track.id) {
-        <li>
-          <div class="meta">
-            <strong>{{ track.title }}</strong>
-            <span>{{ track.artist }}</span>
-          </div>
-          <div class="actions">
-            <button type="button" (click)="player.play(track)">Reproducir</button>
-            <button type="button" (click)="remove(track)">Quitar</button>
-          </div>
-        </li>
-      } @empty {
-        <li class="muted">Esta playlist esta vacia. Agrega temas desde Buscar.</li>
-      }
-    </ul>
-  }
+  <div class="panel">
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    @if (playlist(); as current) {
+      <div class="head">
+        <label class="cover-edit">
+          @if (current.coverUrl) {
+            <img class="cover-img" [src]="current.coverUrl" [alt]="current.name" />
+          } @else {
+            <span class="cover">{{ playlistInitial(current.name) }}</span>
+          }
+          <input type="file" accept="image/*" (change)="onCoverSelected($event)" />
+          <span class="cover-hint">Cambiar imagen</span>
+        </label>
+        <div>
+          <h1>{{ current.name }}</h1>
+          <p class="muted">{{ current.tracks.length }} canciones</p>
+        </div>
+        @if (current.tracks.length > 0) {
+          <button type="button" (click)="player.playAt(current.tracks[0], current.tracks)">
+            Reproducir
+          </button>
+        }
+      </div>
+      <ul class="tracks">
+        @for (track of current.tracks; track track.id) {
+          <li [class.playing]="player.isCurrent(track)">
+            @if (track.imageUrl) {
+              <img [src]="track.imageUrl" [alt]="track.title" />
+            } @else {
+              <div class="cover-fallback"></div>
+            }
+            <div class="meta">
+              <strong>{{ track.title }}</strong>
+              <span>{{ track.artist }}</span>
+            </div>
+            <span class="duration">{{ formatDuration(track.durationSeconds) }}</span>
+            <div class="actions">
+              <button type="button" (click)="player.playAt(track, current.tracks)">Reproducir</button>
+              <button type="button" class="ghost-btn" (click)="remove(track)">Quitar</button>
+            </div>
+          </li>
+        } @empty {
+          <li class="muted">Esta playlist esta vacia. Agrega temas desde Buscar.</li>
+        }
+      </ul>
+    }
+  </div>
 </section>

@@ -1,3 +1,61 @@
-.page {
-  max-width: 52rem;
+:host {
+  display: block;
+  min-height: calc(100dvh - 134px);
+}
+
+.head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.head p {
+  margin: 0;
+}
+
+.cover-edit {
+  position: relative;
+  cursor: pointer;
+}
+
+.cover-edit input {
+  display: none;
+}
+
+.cover,
+.cover-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 10px;
+  display: block;
+}
+
+.cover {
+  display: grid;
+  place-items: center;
+  background: #9b7dff;
+  color: #12081f;
+  font-weight: 800;
+  font-size: 2.2rem;
+}
+
+.cover-img {
+  object-fit: cover;
+}
+
+.cover-hint {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  color: #c4b5fd;
+  text-align: center;
+}
+
+.cover-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background: #282828;
 }

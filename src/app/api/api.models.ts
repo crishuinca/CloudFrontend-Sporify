@@ -12,6 +12,7 @@ export interface JamendoTrack {
   artist: string;
   streamUrl: string;
   imageUrl: string | null;
+  durationSeconds: number | null;
 }
 
 export interface PlaylistTrack {
@@ -21,6 +22,8 @@ export interface PlaylistTrack {
   title: string;
   artist: string;
   streamUrl: string;
+  imageUrl: string | null;
+  durationSeconds: number | null;
   position: number;
 }
 
@@ -29,6 +32,7 @@ export interface Playlist {
   name: string;
   type: 'LIKES' | 'CUSTOM';
   createdAt: string;
+  coverUrl: string | null;
   tracks: PlaylistTrack[];
 }
 
@@ -37,6 +41,8 @@ export interface AddTrackRequest {
   title: string;
   artist: string;
   streamUrl: string;
+  imageUrl?: string | null;
+  durationSeconds?: number | null;
 }
 
 export interface PlayableTrack {
@@ -44,4 +50,5 @@ export interface PlayableTrack {
   artist: string;
   streamUrl: string;
   imageUrl?: string | null;
+  durationSeconds?: number | null;
 }

@@ -1,57 +1,96 @@
 <section class="page">
-  <h1>Buscar</h1>
-  <form class="search-bar" (ngSubmit)="search()">
-    <input
-      name="query"
-      [(ngModel)]="query"
-      type="search"
-      placeholder="Artista, canción o álbum"
-    />
-    <button type="submit">Buscar</button>
-  </form>
+  <div class="panel">
+    <h1>Buscar</h1>
+    <form class="search-bar" (ngSubmit)="search()">
+      <input
+        name="query"
+        [(ngModel)]="query"
+        type="search"
+        placeholder="Que quieres escuchar?"
+      />
+      <button type="submit">Buscar</button>
+    </form>
 
-  @if (playlists().length > 0) {
-    <label class="playlist-pick">
-      Agregar a
-      <select name="playlist" [(ngModel)]="selectedPlaylistId">
-        <option [ngValue]="null">Elige una playlist</option>
-        @for (playlist of playlists(); track playlist.id) {
-          <option [ngValue]="playlist.id">{{ playlist.name }}</option>
-        }
-      </select>
-    </label>
-  }
-
-  @if (loading()) {
-    <p class="muted">Buscando…</p>
-  }
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
-  }
-  @if (notice()) {
-    <p class="ok">{{ notice() }}</p>
-  }
-
-  <ul class="tracks">
-    @for (track of tracks(); track track.externalId) {
-      <li>
-        @if (track.imageUrl) {
-          <img [src]="track.imageUrl" [alt]="track.title" />
-        }
-        <div class="meta">
-          <strong>{{ track.title }}</strong>
-          <span>{{ track.artist }}</span>
-        </div>
-        <div class="actions">
-          <button type="button" (click)="player.play(track)">Reproducir</button>
-          <button type="button" (click)="like(track)">Me gusta</button>
-          <button type="button" (click)="addToPlaylist(track)">A playlist</button>
-        </div>
-      </li>
-    } @empty {
-      @if (!loading()) {
-        <li class="muted">Escribe algo y busca en Jamendo.</li>
-      }
+    @if (loading()) {
+      <p class="muted">Buscando...</p>
     }
-  </ul>
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <ul class="tracks">
+      @for (track of tracks(); track track.externalId) {
+        <li [class.playing]="player.isCurrent(track)">
+          @if (track.imageUrl) {
+            <img [src]="track.imageUrl" [alt]="track.title" />
+          } @else {
+            <div class="cover-fallback"></div>
+          }
+          <div class="meta">
+            <strong>{{ track.title }}</strong>
+            <span>{{ track.artist }}</span>
+          </div>
+          <span class="duration">{{ formatDuration(track.durationSeconds) }}</span>
+          <div class="actions">
+            <button type="button" (click)="player.playAt(track, tracks())">Reproducir</button>
+            <div class="action-cluster">
+              <button type="button" class="ghost-btn" (click)="like(track)">Me gusta</button>
+              @if (likeNotice()[track.externalId]; as likeMsg) {
+                <span class="float-toast">{{ likeMsg }}</span>
+              }
+            </div>
+            <div class="action-cluster">
+              <button type="button" class="ghost-btn" (click)="toggleMenu($event, track)">
+                Agregar a playlist
+              </button>
+              @if (playlistNotice()[track.externalId]; as playlistMsg) {
+                <span class="float-toast">{{ playlistMsg }}</span>
+              }
+              @if (menuTrackId() === track.externalId) {
+                <div class="mini-menu" (click)="keepMenu($event)">
+                  <div class="menu-section">
+                    <button type="button" class="menu-item" (click)="startCreate($event)">
+                      Crear una nueva playlist
+                    </button>
+                    @if (showCreateForm()) {
+                      <form class="create-mini" (ngSubmit)="createAndAdd(track)">
+                        <input
+                          name="newPlaylistName"
+                          [(ngModel)]="newPlaylistName"
+                          placeholder="Nombre de la playlist"
+                          autocomplete="off"
+                        />
+                        <button type="submit">Crear y agregar</button>
+                      </form>
+                    }
+                  </div>
+                  <div class="menu-tab">
+                    <span>Tus playlists</span>
+                  </div>
+                  @if (library.custom().length > 0) {
+                    @for (playlist of library.custom(); track playlist.id) {
+                      <button type="button" class="menu-item playlist-option" (click)="addToExisting(playlist, track)">
+                        @if (playlist.coverUrl) {
+                          <img [src]="playlist.coverUrl" [alt]="playlist.name" />
+                        } @else {
+                          <span class="cover-mini">{{ playlistInitial(playlist.name) }}</span>
+                        }
+                        <span>{{ playlist.name }}</span>
+                      </button>
+                    }
+                  } @else {
+                    <p class="muted menu-empty">Aun no tienes playlists.</p>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </li>
+      } @empty {
+        @if (!loading()) {
+          <li class="muted">Escribe algo y busca en Jamendo.</li>
+        }
+      }
+    </ul>
+  </div>
 </section>

@@ -38,6 +38,10 @@ export class ApiService {
     return this.http.post<Playlist>(`${this.base}/playlists`, { name }).pipe(catchError(this.fail));
   }
 
+  updatePlaylist(id: number, body: { name?: string; coverUrl?: string | null }): Observable<Playlist> {
+    return this.http.put<Playlist>(`${this.base}/playlists/${id}`, body).pipe(catchError(this.fail));
+  }
+
   addTrackToPlaylist(playlistId: number, track: AddTrackRequest): Observable<PlaylistTrack> {
     return this.http
       .post<PlaylistTrack>(`${this.base}/playlists/${playlistId}/tracks`, track)
