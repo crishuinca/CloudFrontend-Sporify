@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { ApiService } from '../api/api.service';
-import { Playlist } from '../api/api.models';
+import { LibraryService } from './library.service';
+import { playlistInitial } from '../shared/format-time';
 
 @Component({
   selector: 'app-playlists',
@@ -13,14 +14,11 @@ import { Playlist } from '../api/api.models';
 })
 export class Playlists {
   private readonly api = inject(ApiService);
+  protected readonly library = inject(LibraryService);
 
   name = '';
-  readonly items = signal<Playlist[]>([]);
   readonly error = signal<string | null>(null);
-
-  constructor() {
-    this.reload();
-  }
+  protected readonly playlistInitial = playlistInitial;
 
   create(): void {
     const name = this.name.trim();
@@ -29,17 +27,10 @@ export class Playlists {
     }
     this.error.set(null);
     this.api.createPlaylist(name).subscribe({
-      next: () => {
+      next: (playlist) => {
         this.name = '';
-        this.reload();
+        this.library.remember(playlist);
       },
-      error: (err: Error) => this.error.set(err.message),
-    });
-  }
-
-  private reload(): void {
-    this.api.listPlaylists().subscribe({
-      next: (items) => this.items.set(items),
       error: (err: Error) => this.error.set(err.message),
     });
   }
