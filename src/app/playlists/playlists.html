@@ -1,0 +1,33 @@
+<section class="page">
+  <div class="panel">
+    <h1>Tu biblioteca</h1>
+    <form class="create" (ngSubmit)="create()">
+      <input name="name" [(ngModel)]="name" placeholder="Nueva playlist" />
+      <button type="submit">Crear</button>
+    </form>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <ul class="list">
+      @for (playlist of library.items(); track playlist.id) {
+        <li>
+          <a [routerLink]="playlist.type === 'LIKES' ? '/likes' : ['/playlists', playlist.id]">
+            @if (playlist.coverUrl) {
+              <img class="cover-img" [src]="playlist.coverUrl" [alt]="playlist.name" />
+            } @else {
+              <span class="cover">{{ playlistInitial(playlist.name) }}</span>
+            }
+            <div>
+              <strong>{{ playlist.name }}</strong>
+              <small>{{ playlist.type === 'LIKES' ? 'Canciones que te gustan' : 'Playlist' }}</small>
+            </div>
+          </a>
+        </li>
+      } @empty {
+        <li class="muted">Aun no hay playlists.</li>
+      }
+    </ul>
+  </div>
+</section>
