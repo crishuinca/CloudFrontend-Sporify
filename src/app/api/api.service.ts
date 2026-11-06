@@ -66,6 +66,12 @@ export class ApiService {
     return this.http.delete<void>(`${this.base}/likes/${trackId}`).pipe(catchError(this.fail));
   }
 
+  recordPlayback(trackId: string, source: string): Observable<void> {
+    return this.http
+      .post<void>(`${this.base}/playbacks`, { trackId, source })
+      .pipe(catchError(this.fail));
+  }
+
   private fail = (error: HttpErrorResponse) =>
     throwError(() => new Error(this.messageOf(error)));
 

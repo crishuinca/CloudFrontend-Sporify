@@ -1,6 +1,7 @@
 import { Component, computed, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
+import { ApiService } from './api/api.service';
 import { AuthService } from './auth/auth.service';
 import { LibraryService } from './playlists/library.service';
 import { PlayerService } from './player/player.service';
@@ -16,6 +17,8 @@ export class App {
   protected readonly auth = inject(AuthService);
   protected readonly player = inject(PlayerService);
   protected readonly library = inject(LibraryService);
+  private readonly api = inject(ApiService);
+  private lastPlaybackKey = '';
   protected readonly playlistInitial = playlistInitial;
   private readonly audio = viewChild<ElementRef<HTMLAudioElement>>('audio');
 
@@ -38,6 +41,18 @@ export class App {
       if (this.auth.ready() && this.auth.loggedIn()) {
         this.library.reload();
       }
+    });
+    effect(() => {
+      const track = this.player.current();
+      if (!this.auth.loggedIn() || !track) {
+        return;
+      }
+      const trackId = track.externalId?.trim() || track.streamUrl;
+      if (!trackId || trackId === this.lastPlaybackKey) {
+        return;
+      }
+      this.lastPlaybackKey = trackId;
+      this.api.recordPlayback(trackId, 'player').subscribe({ error: () => undefined });
     });
   }
 
