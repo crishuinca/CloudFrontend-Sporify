@@ -51,4 +51,5 @@ export interface PlayableTrack {
   streamUrl: string;
   imageUrl?: string | null;
   durationSeconds?: number | null;
+  externalId?: string;
 }
